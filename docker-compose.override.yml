@@ -1,0 +1,11 @@
+services:
+  app-server:
+    ports:
+      - 8080:8080
+  app-client:
+    environment:
+      WATCHPACK_POLLING: "true"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/src:/app/src
