@@ -49,8 +49,6 @@ public class RequestJwtTokensFilter extends OncePerRequestFilter {
             var context = this.securityContextRepository.loadDeferredContext(request).get();
             if (!(context.getAuthentication() instanceof PreAuthenticatedAuthenticationToken)) {
                 writeTokensInResponse(response, context);
-
-                filterChain.doFilter(request, response);
                 return;
             }
         }
