@@ -1,8 +1,6 @@
 package ru.dmc3105.petitionmanaging.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,16 +9,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -29,6 +25,9 @@ public class User implements UserDetails {
     private String password;
     private String firstname;
     private String lastname;
+    @OneToMany
+    @JoinColumn(name = "creator_id")
+    private List<Petition> petitions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
