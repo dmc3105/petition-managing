@@ -1,5 +1,6 @@
 package ru.dmc3105.petitionmanaging.auth.factory.impl;
 
+import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
@@ -10,6 +11,7 @@ import java.time.Instant;
 import java.util.LinkedList;
 import java.util.UUID;
 
+@Setter
 public class DefaultRefreshTokenFactory implements RefreshTokenFactory {
 
     private Duration tokenTtl = Duration.ofDays(1);
@@ -29,7 +31,4 @@ public class DefaultRefreshTokenFactory implements RefreshTokenFactory {
         return new RefreshToken(UUID.randomUUID(), authentication.getName(), authorities, now, now.plus(this.tokenTtl));
     }
 
-    public void setTokenTtl(Duration tokenTtl) {
-        this.tokenTtl = tokenTtl;
-    }
 }
