@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.AuthenticationUserDetailsSe
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
 import ru.dmc3105.petitionmanaging.auth.model.TokenUser;
 
 import java.time.Instant;

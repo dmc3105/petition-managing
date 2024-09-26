@@ -1,7 +1,7 @@
 package ru.dmc3105.petitionmanaging.auth.factory;
 
-import ru.dmc3105.petitionmanaging.auth.AccessToken;
-import ru.dmc3105.petitionmanaging.auth.RefreshToken;
+import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
+import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
 
 public interface AccessTokenFactory {
 

@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
-import ru.dmc3105.petitionmanaging.auth.RefreshToken;
+import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
 
 import java.util.Date;
 

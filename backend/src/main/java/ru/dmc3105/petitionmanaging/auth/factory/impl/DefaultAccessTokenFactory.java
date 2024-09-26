@@ -1,8 +1,7 @@
 package ru.dmc3105.petitionmanaging.auth.factory.impl;
 
-import org.springframework.core.convert.converter.Converter;
-import ru.dmc3105.petitionmanaging.auth.AccessToken;
-import ru.dmc3105.petitionmanaging.auth.RefreshToken;
+import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
+import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
 import ru.dmc3105.petitionmanaging.auth.factory.AccessTokenFactory;
 
 import java.time.Duration;

@@ -2,7 +2,7 @@ package ru.dmc3105.petitionmanaging.auth.factory.impl;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import ru.dmc3105.petitionmanaging.auth.RefreshToken;
+import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
 import ru.dmc3105.petitionmanaging.auth.factory.RefreshTokenFactory;
 
 import java.time.Duration;

@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.auth;
+package ru.dmc3105.petitionmanaging.auth.model;
 
 import java.time.Instant;
 import java.util.List;

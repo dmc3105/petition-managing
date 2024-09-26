@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.dmc3105.petitionmanaging.auth.filter.RequestJwtTokensFilter;
+import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
+import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
 
 @Builder
 public class JwtAuthenticationConfigurer extends AbstractHttpConfigurer<JwtAuthenticationConfigurer, HttpSecurity> {

@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
+import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
 
 @AllArgsConstructor
 public class JwtAuthenticationConverter implements AuthenticationConverter {
