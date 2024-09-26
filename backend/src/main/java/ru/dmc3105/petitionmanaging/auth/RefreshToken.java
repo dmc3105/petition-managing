@@ -1,21 +1,11 @@
 package ru.dmc3105.petitionmanaging.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@Data
-@Builder
-@AllArgsConstructor
-public class RefreshToken {
-    private UUID id;
-    private String subject;
-    private List<String> authorities;
-    private Instant createdAt;
-    private java.time.Instant expiresAt;
+public class RefreshToken extends AbstractToken {
+    public RefreshToken(UUID id, String subject, List<String> authorities, Instant createdAt, Instant expiresAt) {
+        super(id, subject, authorities, createdAt, expiresAt);
+    }
 }
