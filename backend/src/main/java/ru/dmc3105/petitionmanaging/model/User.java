@@ -1,6 +1,5 @@
 package ru.dmc3105.petitionmanaging.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,8 +23,6 @@ public class User implements UserDetails {
     private String password;
     private String firstname;
     private String lastname;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "creator")
-    private List<Petition> createdPetitions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

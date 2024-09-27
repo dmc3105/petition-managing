@@ -9,5 +9,5 @@ public interface PetitionService {
 
     List<Petition> findAllPetitions();
 
-    List<Petition> findAllPetitionsByCreatorUsername(String creatorUsername);
+    List<Petition> findAllByAssigneeUsername(String username);
 }

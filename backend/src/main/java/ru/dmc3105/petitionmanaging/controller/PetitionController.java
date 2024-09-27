@@ -23,6 +23,6 @@ public class PetitionController {
 
     @GetMapping
     public List<Petition> findAllPetitionsByUsername(Principal principal) {
-        return service.findAllPetitionsByCreatorUsername(principal.getName());
+        return service.findAllByAssigneeUsername(principal.getName());
     }
 }
