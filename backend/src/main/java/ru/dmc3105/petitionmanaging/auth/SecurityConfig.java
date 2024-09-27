@@ -51,13 +51,15 @@ public class SecurityConfig {
         http.with(jwtAuthenticationConfigurer, Customizer.withDefaults());
 
         return http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/register"))
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeHttpRequests ->
-                        authorizeHttpRequests
-                                .requestMatchers("/error").permitAll()
-                                .anyRequest().authenticated())
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/register").permitAll()
+                        .anyRequest().authenticated())
                 .build();
     }
 }
