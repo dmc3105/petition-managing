@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.auth;
+package ru.dmc3105.petitionmanaging.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

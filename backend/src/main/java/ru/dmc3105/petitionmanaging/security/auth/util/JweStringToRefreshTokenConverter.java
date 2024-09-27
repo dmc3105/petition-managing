@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.auth.util;
+package ru.dmc3105.petitionmanaging.security.auth.util;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEDecrypter;
@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
-import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
+import ru.dmc3105.petitionmanaging.security.auth.model.RefreshToken;
 
 import java.text.ParseException;
 import java.util.UUID;

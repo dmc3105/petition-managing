@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.auth.filter;
+package ru.dmc3105.petitionmanaging.security.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -17,13 +17,13 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
-import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
-import ru.dmc3105.petitionmanaging.auth.dto.Tokens;
-import ru.dmc3105.petitionmanaging.auth.factory.AccessTokenFactory;
-import ru.dmc3105.petitionmanaging.auth.factory.RefreshTokenFactory;
-import ru.dmc3105.petitionmanaging.auth.factory.impl.DefaultAccessTokenFactory;
-import ru.dmc3105.petitionmanaging.auth.factory.impl.DefaultRefreshTokenFactory;
+import ru.dmc3105.petitionmanaging.security.auth.model.AccessToken;
+import ru.dmc3105.petitionmanaging.security.auth.model.RefreshToken;
+import ru.dmc3105.petitionmanaging.security.auth.dto.Tokens;
+import ru.dmc3105.petitionmanaging.security.auth.factory.AccessTokenFactory;
+import ru.dmc3105.petitionmanaging.security.auth.factory.RefreshTokenFactory;
+import ru.dmc3105.petitionmanaging.security.auth.factory.impl.DefaultAccessTokenFactory;
+import ru.dmc3105.petitionmanaging.security.auth.factory.impl.DefaultRefreshTokenFactory;
 
 import java.io.IOException;
 

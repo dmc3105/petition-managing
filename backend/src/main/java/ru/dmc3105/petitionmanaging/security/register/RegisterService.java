@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.register;
+package ru.dmc3105.petitionmanaging.security.register;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

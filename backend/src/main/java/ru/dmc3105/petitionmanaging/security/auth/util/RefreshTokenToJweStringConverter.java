@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.auth.util;
+package ru.dmc3105.petitionmanaging.security.auth.util;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jwt.EncryptedJWT;
@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
-import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
+import ru.dmc3105.petitionmanaging.security.auth.model.RefreshToken;
 
 import java.util.Date;
 

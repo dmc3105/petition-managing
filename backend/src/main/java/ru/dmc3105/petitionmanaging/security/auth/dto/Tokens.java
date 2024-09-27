@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.auth.dto;
+package ru.dmc3105.petitionmanaging.security.auth.dto;
 
 public record Tokens(
         String accessToken,

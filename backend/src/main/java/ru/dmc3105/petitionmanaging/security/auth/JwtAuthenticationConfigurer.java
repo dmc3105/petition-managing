@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.auth;
+package ru.dmc3105.petitionmanaging.security.auth;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
@@ -12,10 +12,10 @@ import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.dmc3105.petitionmanaging.auth.filter.RefreshTokenFilter;
-import ru.dmc3105.petitionmanaging.auth.filter.RequestJwtTokensFilter;
-import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
-import ru.dmc3105.petitionmanaging.auth.model.RefreshToken;
+import ru.dmc3105.petitionmanaging.security.auth.filter.RefreshTokenFilter;
+import ru.dmc3105.petitionmanaging.security.auth.filter.RequestJwtTokensFilter;
+import ru.dmc3105.petitionmanaging.security.auth.model.AccessToken;
+import ru.dmc3105.petitionmanaging.security.auth.model.RefreshToken;
 
 @Builder
 public class JwtAuthenticationConfigurer extends AbstractHttpConfigurer<JwtAuthenticationConfigurer, HttpSecurity> {

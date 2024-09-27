@@ -1,12 +1,12 @@
-package ru.dmc3105.petitionmanaging.auth;
+package ru.dmc3105.petitionmanaging.security.auth;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import ru.dmc3105.petitionmanaging.auth.model.AbstractToken;
-import ru.dmc3105.petitionmanaging.auth.model.TokenUser;
+import ru.dmc3105.petitionmanaging.security.auth.model.AbstractToken;
+import ru.dmc3105.petitionmanaging.security.auth.model.TokenUser;
 
 import java.time.Instant;
 
