@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.AuthenticationUserDetailsSe
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import ru.dmc3105.petitionmanaging.auth.model.AccessToken;
+import ru.dmc3105.petitionmanaging.auth.model.AbstractToken;
 import ru.dmc3105.petitionmanaging.auth.model.TokenUser;
 
 import java.time.Instant;
@@ -16,7 +16,7 @@ public class TokenAuthenticationUserDetailsService
     @Override
     public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken authenticationToken)
             throws UsernameNotFoundException {
-        if (authenticationToken.getPrincipal() instanceof AccessToken token) {
+        if (authenticationToken.getPrincipal() instanceof AbstractToken token) {
             return new TokenUser(token.getSubject(), "nopassword", true, true,
                     token.getExpiresAt().isAfter(Instant.now()),
                     true,
