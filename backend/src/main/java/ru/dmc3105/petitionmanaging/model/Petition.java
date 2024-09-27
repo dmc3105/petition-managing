@@ -1,5 +1,7 @@
 package ru.dmc3105.petitionmanaging.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +18,7 @@ public class Petition {
     public enum Stage {CREATED, VIEWED, PROCESSED, COMPLETED, CANCELED};
 
     @Id
+    @GeneratedValue
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -25,7 +28,12 @@ public class Petition {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "executor_id")
     private User executor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id")
+    @JsonBackReference
+    private User creator;
 }

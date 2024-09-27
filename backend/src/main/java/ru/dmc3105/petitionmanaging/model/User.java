@@ -1,10 +1,8 @@
 package ru.dmc3105.petitionmanaging.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,9 +23,8 @@ public class User implements UserDetails {
     private String password;
     private String firstname;
     private String lastname;
-    @OneToMany
-    @JoinColumn(name = "creator_id")
-    private List<Petition> petitions;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "creator")
+    private List<Petition> createdPetitions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
