@@ -3,9 +3,11 @@ package ru.dmc3105.petitionmanaging.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dmc3105.petitionmanaging.exception.PetitionNotFoundException;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
+import ru.dmc3105.petitionmanaging.repository.PetitionRepository;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.stream.Stream;
 @Service
 public class DefaultPetitionService implements PetitionService {
     private StageEventService stageEventService;
+    private PetitionRepository petitionRepository;
 
     @Override
     @Transactional
@@ -49,5 +52,20 @@ public class DefaultPetitionService implements PetitionService {
                 .filter(StageEvent::getIsCurrent)
                 .findFirst()
                 .orElseThrow();
+    }
+
+    @Override
+    public Petition getPetitionById(Long id) {
+        return petitionRepository.findById(id).orElseThrow(
+                () -> new PetitionNotFoundException("Petition with %d not found".formatted(id)));
+    }
+
+    @Override
+    public User getPetitionCreator(Petition petition) {
+        return petition.getEvents().stream()
+                .filter(stageEvent -> stageEvent.getStage() == StageEvent.Stage.CREATED)
+                .findFirst()
+                .orElseThrow()
+                .getAssignee();
     }
 }

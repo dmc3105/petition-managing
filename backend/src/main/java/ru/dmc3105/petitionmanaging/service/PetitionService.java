@@ -12,4 +12,8 @@ public interface PetitionService {
     Stream<Petition> getAllPetitionsByCreator(User user);
 
     StageEvent getPetitionCurrentStageEvent(Petition petition);
+
+    Petition getPetitionById(Long id);
+
+    User getPetitionCreator(Petition petition);
 }
