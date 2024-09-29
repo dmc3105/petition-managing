@@ -23,6 +23,9 @@ public class User implements UserDetails {
     private String password;
     private String firstname;
     private String lastname;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<StageEvent> events;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
