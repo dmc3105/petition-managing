@@ -34,6 +34,11 @@ public class PetitionController {
         return petitionService.getAllPetitionsByCreator(user).map(this::getPetitionResponseDto).toList();
     }
 
+    @GetMapping("/{id}")
+    public PetitionResponseDto getPetitionById(@PathVariable Long id) {
+        return getPetitionResponseDto(petitionService.getPetitionById(id));
+    }
+
     private PetitionResponseDto getPetitionResponseDto(Petition petition) {
         final StageEvent currentStageEvent = petitionService.getPetitionCurrentStageEvent(petition);
         final User creator = petitionService.getPetitionCreator(petition);
