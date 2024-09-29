@@ -36,7 +36,7 @@ public class PetitionController {
 
     private PetitionResponseDto getPetitionResponseDto(Petition petition) {
         final StageEvent currentStageEvent = petitionService.getPetitionCurrentStageEvent(petition);
-        final User creator = currentStageEvent.getAssignee();
+        final User creator = petitionService.getPetitionCreator(petition);
 
         return new PetitionResponseDto(
                 petition.getId(),
