@@ -57,7 +57,7 @@ public class DefaultPetitionService implements PetitionService {
     @Override
     public Petition getPetitionById(Long id) {
         return petitionRepository.findById(id).orElseThrow(
-                () -> new PetitionNotFoundException("Petition with %d not found".formatted(id)));
+                () -> new PetitionNotFoundException(id));
     }
 
     @Override
