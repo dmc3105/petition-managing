@@ -26,10 +26,10 @@ public class StageEvent {
     @Enumerated(EnumType.STRING)
     private Stage stage;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private User assignee;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Petition petition;
 
 }

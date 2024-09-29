@@ -24,7 +24,7 @@ public class Petition {
 
     private String description;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "petition_id")
     private List<StageEvent> events;
 }
