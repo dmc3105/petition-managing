@@ -1,13 +1,15 @@
 package ru.dmc3105.petitionmanaging.service;
 
 import ru.dmc3105.petitionmanaging.model.Petition;
+import ru.dmc3105.petitionmanaging.model.StageEvent;
+import ru.dmc3105.petitionmanaging.model.User;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface PetitionService {
-    void createPetition(String reason, String description, String creator);
+    void addPetition(String reason, String description, User creator);
 
-    List<Petition> findAllPetitions();
+    Stream<Petition> getAllPetitionsByCreator(User user);
 
-    List<Petition> findAllByAssigneeUsername(String username);
+    StageEvent getPetitionCurrentStageEvent(Petition petition);
 }
