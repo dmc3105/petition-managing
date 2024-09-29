@@ -68,4 +68,11 @@ public class DefaultPetitionService implements PetitionService {
                 .orElseThrow()
                 .getAssignee();
     }
+
+    @Override
+    public void updatePetition(Petition petition, String reason, String description) {
+        petition.setReason(reason);
+        petition.setDescription(description);
+        petitionRepository.save(petition);
+    }
 }

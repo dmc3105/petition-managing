@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.dmc3105.petitionmanaging.dto.CreatePetitionRequestDto;
 import ru.dmc3105.petitionmanaging.dto.PetitionResponseDto;
+import ru.dmc3105.petitionmanaging.dto.UpdatePetitionRequestDto;
 import ru.dmc3105.petitionmanaging.dto.UserResponseDto;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
@@ -37,6 +38,15 @@ public class PetitionController {
     @GetMapping("/{id}")
     public PetitionResponseDto getPetitionById(@PathVariable Long id) {
         return getPetitionResponseDto(petitionService.getPetitionById(id));
+    }
+
+    @PatchMapping("/{id}")
+    public void updatePetitionById(@PathVariable Long id,
+                                   @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
+        final Petition petition = petitionService.getPetitionById(id);
+        petitionService.updatePetition(petition,
+                updatePetitionRequestDto.reason(),
+                updatePetitionRequestDto.description());
     }
 
     private PetitionResponseDto getPetitionResponseDto(Petition petition) {

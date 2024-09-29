@@ -16,4 +16,6 @@ public interface PetitionService {
     Petition getPetitionById(Long id);
 
     User getPetitionCreator(Petition petition);
+
+    void updatePetition(Petition petition, String reason, String description);
 }
