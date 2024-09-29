@@ -24,7 +24,7 @@ public class User implements UserDetails {
     private String firstname;
     private String lastname;
     @OneToMany
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "assignee_id")
     private List<StageEvent> events;
 
     @Override
