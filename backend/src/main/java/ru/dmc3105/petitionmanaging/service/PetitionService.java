@@ -18,4 +18,6 @@ public interface PetitionService {
     User getPetitionCreator(Petition petition);
 
     void updatePetition(Petition petition, String reason, String description);
+
+    void deletePetition(Petition petition);
 }

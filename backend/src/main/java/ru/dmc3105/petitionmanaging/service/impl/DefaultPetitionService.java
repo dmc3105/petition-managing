@@ -75,4 +75,9 @@ public class DefaultPetitionService implements PetitionService {
         petition.setDescription(description);
         petitionRepository.save(petition);
     }
+
+    @Override
+    public void deletePetition(Petition petition) {
+        petitionRepository.delete(petition);
+    }
 }

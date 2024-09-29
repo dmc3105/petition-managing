@@ -49,6 +49,12 @@ public class PetitionController {
                 updatePetitionRequestDto.description());
     }
 
+    @DeleteMapping("/{id}")
+    public void deletePetitionById(@PathVariable Long id) {
+        final Petition petition = petitionService.getPetitionById(id);
+        petitionService.deletePetition(petition);
+    }
+
     private PetitionResponseDto getPetitionResponseDto(Petition petition) {
         final StageEvent currentStageEvent = petitionService.getPetitionCurrentStageEvent(petition);
         final User creator = petitionService.getPetitionCreator(petition);
