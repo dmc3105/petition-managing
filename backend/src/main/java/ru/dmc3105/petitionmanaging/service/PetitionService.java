@@ -7,7 +7,7 @@ import ru.dmc3105.petitionmanaging.model.User;
 import java.util.stream.Stream;
 
 public interface PetitionService {
-    void addPetition(String reason, String description, User creator);
+    Petition addPetition(String reason, String description, User creator);
 
     Stream<Petition> getAllPetitionsByCreator(User user);
 
@@ -17,7 +17,7 @@ public interface PetitionService {
 
     User getPetitionCreator(Petition petition);
 
-    void updatePetition(Petition petition, String reason, String description);
+    Petition updatePetition(Petition petition, String reason, String description);
 
     void deletePetition(Petition petition);
 }

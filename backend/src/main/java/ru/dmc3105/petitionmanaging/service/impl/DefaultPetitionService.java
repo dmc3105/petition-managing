@@ -21,7 +21,7 @@ public class DefaultPetitionService implements PetitionService {
 
     @Override
     @Transactional
-    public void addPetition(String reason, String description, User creator) {
+    public Petition addPetition(String reason, String description, User creator) {
         Petition newPetition = Petition.builder()
                 .reason(reason)
                 .description(description)
@@ -36,6 +36,7 @@ public class DefaultPetitionService implements PetitionService {
                 .build();
 
         stageEventService.addStageEvent(creationEvent);
+        return newPetition;
     }
 
     @Override
@@ -70,10 +71,11 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
-    public void updatePetition(Petition petition, String reason, String description) {
+    public Petition updatePetition(Petition petition, String reason, String description) {
         petition.setReason(reason);
         petition.setDescription(description);
         petitionRepository.save(petition);
+        return petition;
     }
 
     @Override
