@@ -10,7 +10,7 @@ public record PetitionResponseDto(
         String description,
         StageEvent.Stage currentStage,
         Date creationDate,
-        UserResponseDto creator
+        UserInfoResponseDto creator
 ) {
 
 }

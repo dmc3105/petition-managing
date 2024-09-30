@@ -1,6 +1,6 @@
 package ru.dmc3105.petitionmanaging.dto;
 
-public record UserResponseDto (
+public record UserInfoResponseDto(
         Long id,
         String username,
         String firstname,
