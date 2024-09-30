@@ -3,6 +3,7 @@ package ru.dmc3105.petitionmanaging.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
 import ru.dmc3105.petitionmanaging.repository.StageEventRepository;
@@ -21,5 +22,10 @@ public class StageEventService {
     @Transactional(readOnly = true)
     public Stream<StageEvent> getStageEventsByAssignee(User user) {
         return repository.findAllByAssignee(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Stream<StageEvent> getAllByPetition(Petition petition) {
+        return repository.findAllByPetition(petition);
     }
 }
