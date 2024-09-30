@@ -1,11 +1,9 @@
 package ru.dmc3105.petitionmanaging.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.dmc3105.petitionmanaging.dto.CreatePetitionRequestDto;
-import ru.dmc3105.petitionmanaging.dto.PetitionResponseDto;
-import ru.dmc3105.petitionmanaging.dto.UpdatePetitionRequestDto;
-import ru.dmc3105.petitionmanaging.dto.UserResponseDto;
+import ru.dmc3105.petitionmanaging.dto.*;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
@@ -22,15 +20,17 @@ public class PetitionController {
     private PetitionService petitionService;
     private UserService userService;
     @PostMapping
-    public void createPetition(@RequestBody CreatePetitionRequestDto petitionRequestDto, Principal principal) {
+    public PetitionInfoResponseDto createPetitionByPrincipal(@RequestBody CreatePetitionRequestDto petitionRequestDto, Principal principal) {
         final User user = userService.getUserByUsername(principal.getName());
-        petitionService.addPetition(petitionRequestDto.reason(),
+        Petition createdPetition = petitionService.addPetition(petitionRequestDto.reason(),
                 petitionRequestDto.description(),
                 user);
+        return toPetitionInfoResponseDto(createdPetition);
     }
 
+
     @GetMapping
-    public List<PetitionResponseDto> getAllPetitionsByCreatorUsername(Principal principal) {
+    public List<PetitionResponseDto> getAllPetitionsByPrincipal(Principal principal) {
         final User user = userService.getUserByUsername(principal.getName());
         return petitionService.getAllPetitionsByCreator(user).map(this::getPetitionResponseDto).toList();
     }
@@ -40,13 +40,15 @@ public class PetitionController {
         return getPetitionResponseDto(petitionService.getPetitionById(id));
     }
 
-    @PatchMapping("/{id}")
-    public void updatePetitionById(@PathVariable Long id,
+    @PutMapping("/{id}")
+    public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
                                    @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);
-        petitionService.updatePetition(petition,
+        Petition updatedPetition = petitionService.updatePetition(petition,
                 updatePetitionRequestDto.reason(),
                 updatePetitionRequestDto.description());
+
+        return toPetitionInfoResponseDto(updatedPetition);
     }
 
     @DeleteMapping("/{id}")
@@ -65,12 +67,20 @@ public class PetitionController {
                 petition.getDescription(),
                 currentStageEvent.getStage(),
                 currentStageEvent.getOccurenceDate(),
-                new UserResponseDto(
+                new UserInfoResponseDto(
                         creator.getId(),
                         creator.getUsername(),
                         creator.getFirstname(),
                         creator.getLastname()
                 )
+        );
+    }
+
+    private PetitionInfoResponseDto toPetitionInfoResponseDto(Petition petition) {
+        return new PetitionInfoResponseDto(
+                petition.getId(),
+                petition.getReason(),
+                petition.getDescription()
         );
     }
 }
