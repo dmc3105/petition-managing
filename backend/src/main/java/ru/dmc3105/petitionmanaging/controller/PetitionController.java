@@ -1,7 +1,7 @@
 package ru.dmc3105.petitionmanaging.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.dmc3105.petitionmanaging.dto.*;
 import ru.dmc3105.petitionmanaging.model.Petition;
@@ -19,6 +19,7 @@ import java.util.List;
 public class PetitionController {
     private PetitionService petitionService;
     private UserService userService;
+
     @PostMapping
     public PetitionInfoResponseDto createPetitionByPrincipal(@RequestBody CreatePetitionRequestDto petitionRequestDto, Principal principal) {
         final User user = userService.getUserByUsername(principal.getName());
@@ -36,11 +37,13 @@ public class PetitionController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
     public PetitionResponseDto getPetitionById(@PathVariable Long id) {
         return getPetitionResponseDto(petitionService.getPetitionById(id));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
     public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
                                    @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);
@@ -52,6 +55,7 @@ public class PetitionController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
     public void deletePetitionById(@PathVariable Long id) {
         final Petition petition = petitionService.getPetitionById(id);
         petitionService.deletePetition(petition);

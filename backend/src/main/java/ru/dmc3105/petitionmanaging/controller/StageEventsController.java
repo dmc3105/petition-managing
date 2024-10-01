@@ -2,6 +2,7 @@ package ru.dmc3105.petitionmanaging.controller;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +25,10 @@ public class StageEventsController {
     private StageEventService stageEventService;
     private PetitionService petitionService;
 
-    @GetMapping("/{petitionId}/event")
-    public List<StageEventResponseDto> getStageEventsByPetitionId(@PathVariable Long petitionId) {
-        Petition petition = petitionService.getPetitionById(petitionId);
+    @GetMapping("/{id}/event")
+    @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
+    public List<StageEventResponseDto> getStageEventsByPetitionId(@PathVariable Long id) {
+        Petition petition = petitionService.getPetitionById(id);
         return stageEventService.getAllByPetition(petition)
                 .map(this::getStageEventDto).toList();
     }
