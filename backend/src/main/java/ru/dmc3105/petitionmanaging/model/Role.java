@@ -25,7 +25,7 @@ import java.util.List;
 @Entity
 @Table(name = "roles")
 public class Role {
-    public enum RoleName {USER, ADMIN}
+    public enum RoleName {USER, ADMIN, APPLICATION_ADMIN}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
