@@ -2,7 +2,6 @@ package ru.dmc3105.petitionmanaging.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +13,6 @@ import ru.dmc3105.petitionmanaging.dto.CreatePetitionRequestDto;
 import ru.dmc3105.petitionmanaging.dto.PetitionInfoResponseDto;
 import ru.dmc3105.petitionmanaging.dto.PetitionResponseDto;
 import ru.dmc3105.petitionmanaging.dto.UpdatePetitionRequestDto;
-import ru.dmc3105.petitionmanaging.dto.UserInfoResponseDto;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
@@ -26,76 +24,51 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/petition")
-public class PetitionController {
+@RequestMapping("/user/petition")
+public class PetitionUserController {
     private PetitionService petitionService;
     private UserService userService;
+    private PetitionToDtoMapper mapper;
 
     @PostMapping
     public PetitionInfoResponseDto createPetitionByPrincipal(@RequestBody CreatePetitionRequestDto petitionRequestDto, Principal principal) {
         final User user = userService.getUserByUsername(principal.getName());
-        Petition createdPetition = petitionService.addPetition(petitionRequestDto.reason(),
+        final Petition createdPetition = petitionService.addPetition(petitionRequestDto.reason(),
                 petitionRequestDto.description(),
                 user);
-        return toPetitionInfoResponseDto(createdPetition);
+        return mapper.toPetitionInfoResponseDto(createdPetition);
     }
-
 
     @GetMapping
     public List<PetitionResponseDto> getAllPetitionsByPrincipal(Principal principal) {
         final User user = userService.getUserByUsername(principal.getName());
-        return petitionService.getAllPetitionsByCreator(user).map(this::getPetitionResponseDto).toList();
+        return petitionService.getAllPetitionsByCreator(user)
+                .map(this::toPetitionResponseDto)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') || @authorizationService.isPetitionCreator(principal, #id)")
+    @PreAuthorize("@authorizationService.isPetitionOwner(principal, #id)")
     public PetitionResponseDto getPetitionById(@PathVariable Long id) {
-        return getPetitionResponseDto(petitionService.getPetitionById(id));
+        final Petition petition = petitionService.getPetitionById(id);
+        return toPetitionResponseDto(petition);
     }
 
+
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') || @authorizationService.isPetitionCreator(principal, #id)")
+    @PreAuthorize("@authorizationService.isPetitionOwner(principal, #id)")
     public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
                                                       @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);
-        Petition updatedPetition = petitionService.updatePetition(petition,
+        final Petition updatedPetition = petitionService.updatePetition(petition,
                 updatePetitionRequestDto.reason(),
                 updatePetitionRequestDto.description());
 
-        return toPetitionInfoResponseDto(updatedPetition);
+        return mapper.toPetitionInfoResponseDto(updatedPetition);
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deletePetitionById(@PathVariable Long id) {
-        final Petition petition = petitionService.getPetitionById(id);
-        petitionService.deletePetition(petition);
-    }
-
-    private PetitionResponseDto getPetitionResponseDto(Petition petition) {
-        final StageEvent currentStageEvent = petitionService.getPetitionCurrentStageEvent(petition);
-        final User creator = petitionService.getPetitionCreator(petition);
-
-        return new PetitionResponseDto(
-                petition.getId(),
-                petition.getReason(),
-                petition.getDescription(),
-                currentStageEvent.getStage(),
-                currentStageEvent.getOccurenceDate(),
-                new UserInfoResponseDto(
-                        creator.getId(),
-                        creator.getUsername(),
-                        creator.getFirstname(),
-                        creator.getLastname()
-                )
-        );
-    }
-
-    private PetitionInfoResponseDto toPetitionInfoResponseDto(Petition petition) {
-        return new PetitionInfoResponseDto(
-                petition.getId(),
-                petition.getReason(),
-                petition.getDescription()
-        );
+    private PetitionResponseDto toPetitionResponseDto(Petition petition) {
+        final StageEvent currentEvent = petitionService.getPetitionCurrentStageEvent(petition);
+        return mapper.toPetitionResponseDto(petition, currentEvent);
     }
 }
