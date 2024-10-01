@@ -1,6 +1,7 @@
 package ru.dmc3105.petitionmanaging.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
     private String firstname;
     private String lastname;

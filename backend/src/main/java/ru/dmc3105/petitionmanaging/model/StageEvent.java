@@ -1,6 +1,7 @@
 package ru.dmc3105.petitionmanaging.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,10 +31,13 @@ public class StageEvent {
     @GeneratedValue
     private Long id;
 
+    @Column(updatable = false, nullable = false)
     private Date occurenceDate;
 
+    @Column(nullable = false)
     private Boolean isCurrent;
 
+    @Column(updatable = false, nullable = false)
     @Enumerated(EnumType.STRING)
     private Stage stage;
 
