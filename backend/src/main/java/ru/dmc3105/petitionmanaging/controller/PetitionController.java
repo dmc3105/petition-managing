@@ -48,13 +48,13 @@ public class PetitionController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || @authorizationService.isPetitionCreator(principal, #id)")
     public PetitionResponseDto getPetitionById(@PathVariable Long id) {
         return getPetitionResponseDto(petitionService.getPetitionById(id));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || @authorizationService.isPetitionCreator(principal, #id)")
     public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
                                                       @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);
@@ -66,7 +66,7 @@ public class PetitionController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deletePetitionById(@PathVariable Long id) {
         final Petition petition = petitionService.getPetitionById(id);
         petitionService.deletePetition(petition);
