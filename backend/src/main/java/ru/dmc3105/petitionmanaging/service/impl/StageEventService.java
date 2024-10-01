@@ -20,8 +20,8 @@ public class StageEventService {
     }
 
     @Transactional(readOnly = true)
-    public Stream<StageEvent> getStageEventsByAssignee(User user) {
-        return repository.findAllByAssignee(user);
+    public Stream<StageEvent> getStageEventsByAssignee(User assignee) {
+        return repository.findAllByAssignee(assignee);
     }
 
     @Transactional(readOnly = true)
