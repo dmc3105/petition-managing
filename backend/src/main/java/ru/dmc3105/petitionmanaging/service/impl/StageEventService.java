@@ -24,6 +24,13 @@ public class StageEventService {
         return repository.findAllByAssignee(assignee);
     }
 
+    public StageEvent getStageEventByPetitionAndStage(Petition petition, StageEvent.Stage stage) {
+        return petition.getEvents().stream()
+                .filter(event -> event.getStage() == stage)
+                .findFirst()
+                .orElseThrow();
+    }
+
     @Transactional(readOnly = true)
     public Stream<StageEvent> getAllByPetition(Petition petition) {
         return repository.findAllByPetition(petition);
