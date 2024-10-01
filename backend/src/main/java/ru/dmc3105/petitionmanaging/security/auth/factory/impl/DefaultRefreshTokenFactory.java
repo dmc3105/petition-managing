@@ -3,8 +3,8 @@ package ru.dmc3105.petitionmanaging.security.auth.factory.impl;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import ru.dmc3105.petitionmanaging.security.auth.model.RefreshToken;
 import ru.dmc3105.petitionmanaging.security.auth.factory.RefreshTokenFactory;
+import ru.dmc3105.petitionmanaging.security.auth.model.RefreshToken;
 
 import java.time.Duration;
 import java.time.Instant;

@@ -17,10 +17,10 @@ public class RegisterService {
                          String firstname,
                          String lastname) {
         repository.save(User.builder()
-                        .username(username)
-                        .password(passwordEncoder.encode(password))
-                        .firstname(firstname)
-                        .lastname(lastname)
-        .build());
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .firstname(firstname)
+                .lastname(lastname)
+                .build());
     }
 }

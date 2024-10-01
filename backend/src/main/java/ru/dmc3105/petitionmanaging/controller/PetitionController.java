@@ -2,8 +2,19 @@ package ru.dmc3105.petitionmanaging.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import ru.dmc3105.petitionmanaging.dto.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.dmc3105.petitionmanaging.dto.CreatePetitionRequestDto;
+import ru.dmc3105.petitionmanaging.dto.PetitionInfoResponseDto;
+import ru.dmc3105.petitionmanaging.dto.PetitionResponseDto;
+import ru.dmc3105.petitionmanaging.dto.UpdatePetitionRequestDto;
+import ru.dmc3105.petitionmanaging.dto.UserInfoResponseDto;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
@@ -45,7 +56,7 @@ public class PetitionController {
     @PutMapping("/{id}")
     @PreAuthorize("@authorizationService.hasAccessTo(principal, #id)")
     public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
-                                   @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
+                                                      @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);
         Petition updatedPetition = petitionService.updatePetition(petition,
                 updatePetitionRequestDto.reason(),

@@ -1,8 +1,8 @@
 package ru.dmc3105.petitionmanaging.security.auth.factory.impl;
 
+import ru.dmc3105.petitionmanaging.security.auth.factory.AccessTokenFactory;
 import ru.dmc3105.petitionmanaging.security.auth.model.AccessToken;
 import ru.dmc3105.petitionmanaging.security.auth.model.RefreshToken;
-import ru.dmc3105.petitionmanaging.security.auth.factory.AccessTokenFactory;
 
 import java.time.Duration;
 import java.time.Instant;

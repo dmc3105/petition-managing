@@ -51,7 +51,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
-            JwtAuthenticationConfigurer jwtAuthenticationConfigurer) throws Exception {
+                                                   JwtAuthenticationConfigurer jwtAuthenticationConfigurer) throws Exception {
         http.with(jwtAuthenticationConfigurer, Customizer.withDefaults());
 
         return http

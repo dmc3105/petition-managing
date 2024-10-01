@@ -10,7 +10,7 @@ import ru.dmc3105.petitionmanaging.repository.UserRepository;
 
 @AllArgsConstructor
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     public User getUserByUsername(String username) {

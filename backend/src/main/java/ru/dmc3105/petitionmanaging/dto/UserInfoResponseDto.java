@@ -5,5 +5,5 @@ public record UserInfoResponseDto(
         String username,
         String firstname,
         String lastname
-){
+) {
 }
