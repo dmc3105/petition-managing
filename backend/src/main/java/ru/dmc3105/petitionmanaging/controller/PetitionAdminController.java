@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dmc3105.petitionmanaging.dto.PetitionInfoResponseDto;
 import ru.dmc3105.petitionmanaging.dto.PetitionResponseDto;
+import ru.dmc3105.petitionmanaging.dto.StageEventResponseDto;
 import ru.dmc3105.petitionmanaging.dto.UpdatePetitionRequestDto;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
-import ru.dmc3105.petitionmanaging.service.impl.UserService;
+import ru.dmc3105.petitionmanaging.service.impl.StageEventService;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -23,8 +26,9 @@ import ru.dmc3105.petitionmanaging.service.impl.UserService;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class PetitionAdminController {
     private PetitionService petitionService;
-    private UserService userService;
+    private StageEventService stageEventService;
     private PetitionToDtoMapper mapper;
+    private StageEventToDtoMapper stageEventMapper;
 
     @GetMapping("/{id}")
     public PetitionResponseDto getPetitionById(@PathVariable Long id) {
@@ -32,13 +36,21 @@ public class PetitionAdminController {
         return toPetitionResponseDto(petition);
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}/event")
+    public List<StageEventResponseDto> getStageEventsByPetitionId(@PathVariable Long id) {
+        Petition petition = petitionService.getPetitionById(id);
+        return stageEventService.getAllByPetition(petition)
+                .map(event -> stageEventMapper.toStageEventDto(event))
+                .toList();
+    }
+
+    @DeleteMapping("/{id}/delete")
     public void deletePetitionById(@PathVariable Long id) {
         final Petition petition = petitionService.getPetitionById(id);
         petitionService.deletePetition(petition);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update")
     public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
                                                       @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);
