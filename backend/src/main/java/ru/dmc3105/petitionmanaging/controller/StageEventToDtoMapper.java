@@ -1,34 +1,19 @@
 package ru.dmc3105.petitionmanaging.controller;
 
-import org.springframework.stereotype.Component;
-import ru.dmc3105.petitionmanaging.dto.PetitionInfoResponseDto;
-import ru.dmc3105.petitionmanaging.dto.StageEventResponseDto;
-import ru.dmc3105.petitionmanaging.dto.UserInfoResponseDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import ru.dmc3105.petitionmanaging.dto.PetitionDto;
+import ru.dmc3105.petitionmanaging.dto.StageEventDto;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
-import ru.dmc3105.petitionmanaging.model.User;
 
-@Component
-public class StageEventToDtoMapper {
-    public StageEventResponseDto toStageEventDto(StageEvent stageEvent) {
-        final User assignee = stageEvent.getAssignee();
-        final Petition petition = stageEvent.getPetition();
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public abstract class StageEventToDtoMapper {
 
-        return new StageEventResponseDto(
-                stageEvent.getId(),
-                stageEvent.getOccurenceDate(),
-                stageEvent.getStage(),
-                new UserInfoResponseDto(
-                        assignee.getId(),
-                        assignee.getUsername(),
-                        assignee.getFirstname(),
-                        assignee.getLastname()
-                ),
-                new PetitionInfoResponseDto(
-                        petition.getId(),
-                        petition.getReason(),
-                        petition.getDescription()
-                )
-        );
-    }
+    public abstract StageEventDto stageEventToDto(StageEvent stageEvent);
+
+    @Mapping(target = "lastEvent", ignore = true)
+    @Mapping(target = "creationEvent", ignore = true)
+    protected abstract PetitionDto petitionToDto(Petition petition);
 }

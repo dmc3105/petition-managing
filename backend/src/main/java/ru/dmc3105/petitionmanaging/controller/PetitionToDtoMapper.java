@@ -1,35 +1,35 @@
 package ru.dmc3105.petitionmanaging.controller;
 
-import org.springframework.stereotype.Component;
-import ru.dmc3105.petitionmanaging.dto.PetitionInfoResponseDto;
-import ru.dmc3105.petitionmanaging.dto.PetitionResponseDto;
-import ru.dmc3105.petitionmanaging.dto.UserInfoResponseDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import ru.dmc3105.petitionmanaging.dto.PetitionDto;
+import ru.dmc3105.petitionmanaging.dto.StageEventDto;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 
-@Component
-public class PetitionToDtoMapper {
-    public PetitionInfoResponseDto toPetitionInfoResponseDto(Petition petition) {
-        return new PetitionInfoResponseDto(
-                petition.getId(),
-                petition.getReason(),
-                petition.getDescription()
-        );
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public abstract class PetitionToDtoMapper {
+    @Mapping(target = "lastEvent", expression = "java(getCurrentEvent(petition))")
+    @Mapping(target = "creationEvent", expression = "java(getCreationEvent(petition))")
+    public abstract PetitionDto petitionToDto(Petition petition);
+
+    protected StageEventDto getCurrentEvent(Petition petition) {
+        return petition.getEvents().stream()
+                .filter(StageEvent::getIsCurrent)
+                .findFirst()
+                .map(this::stageEventToDto)
+                .orElse(null);
     }
 
-    public PetitionResponseDto toPetitionResponseDto(Petition petition, StageEvent stageEvent) {
-        return new PetitionResponseDto(
-                petition.getId(),
-                petition.getReason(),
-                petition.getDescription(),
-                stageEvent.getStage(),
-                stageEvent.getOccurenceDate(),
-                new UserInfoResponseDto(
-                        stageEvent.getAssignee().getId(),
-                        stageEvent.getAssignee().getUsername(),
-                        stageEvent.getAssignee().getFirstname(),
-                        stageEvent.getAssignee().getLastname()
-                )
-        );
+    protected StageEventDto getCreationEvent(Petition petition) {
+        return petition.getEvents().stream()
+                .filter(event -> event.getStage() == StageEvent.Stage.CREATED)
+                .findFirst()
+                .map(this::stageEventToDto)
+                .orElse(null);
     }
+
+    @Mapping(target = "petition",ignore = true)
+    protected abstract StageEventDto stageEventToDto(StageEvent stageEvent);
 }
