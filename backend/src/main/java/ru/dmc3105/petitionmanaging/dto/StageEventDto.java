@@ -1,5 +1,6 @@
 package ru.dmc3105.petitionmanaging.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 
 import java.util.Date;
@@ -9,6 +10,6 @@ public record StageEventDto(
         Date occurenceDate,
         StageEvent.Stage stage,
         UserDto assignee,
-        PetitionDto petition
+        @JsonIgnoreProperties({"lastEvent", "creationEvent"}) PetitionDto petition
 ) {
 }
