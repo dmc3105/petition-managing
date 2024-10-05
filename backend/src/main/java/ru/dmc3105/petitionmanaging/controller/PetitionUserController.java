@@ -1,7 +1,6 @@
 package ru.dmc3105.petitionmanaging.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +47,6 @@ public class PetitionUserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("@authorizationService.isPetitionOwner(principal, #id)")
     public PetitionResponseDto getPetitionById(@PathVariable Long id) {
         final Petition petition = petitionService.getPetitionById(id);
         return toPetitionResponseDto(petition);
@@ -56,7 +54,6 @@ public class PetitionUserController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("@authorizationService.isPetitionOwner(principal, #id)")
     public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
                                                       @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);

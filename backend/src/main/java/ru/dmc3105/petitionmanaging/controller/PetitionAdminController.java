@@ -1,7 +1,6 @@
 package ru.dmc3105.petitionmanaging.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,6 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/petition")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class PetitionAdminController {
     private PetitionService petitionService;
     private StageEventService stageEventService;
