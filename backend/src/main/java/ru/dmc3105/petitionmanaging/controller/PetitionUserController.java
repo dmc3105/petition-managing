@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dmc3105.petitionmanaging.dto.CreatePetitionRequestDto;
-import ru.dmc3105.petitionmanaging.dto.PetitionInfoResponseDto;
-import ru.dmc3105.petitionmanaging.dto.PetitionResponseDto;
-import ru.dmc3105.petitionmanaging.dto.UpdatePetitionRequestDto;
+import ru.dmc3105.petitionmanaging.controller.request.AddPetitionRequest;
+import ru.dmc3105.petitionmanaging.controller.request.UpdatePetitionRequest;
+import ru.dmc3105.petitionmanaging.dto.PetitionDto;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
@@ -27,19 +26,20 @@ import java.util.List;
 public class PetitionUserController {
     private PetitionService petitionService;
     private UserService userService;
-    private PetitionToDtoMapper mapper;
+    private PetitionToDtoMapper petitionMapper;
 
     @PostMapping
-    public PetitionInfoResponseDto createPetitionByPrincipal(@RequestBody CreatePetitionRequestDto petitionRequestDto, Principal principal) {
+    public PetitionDto createPetitionByPrincipal(@RequestBody AddPetitionRequest petitionRequestDto,
+                                                 Principal principal) {
         final User user = userService.getUserByUsername(principal.getName());
         final Petition createdPetition = petitionService.addPetition(petitionRequestDto.reason(),
                 petitionRequestDto.description(),
                 user);
-        return mapper.toPetitionInfoResponseDto(createdPetition);
+        return petitionMapper.petitionToDto(createdPetition);
     }
 
     @GetMapping
-    public List<PetitionResponseDto> getAllPetitionsByPrincipal(Principal principal) {
+    public List<PetitionDto> getAllPetitionsByPrincipal(Principal principal) {
         final User user = userService.getUserByUsername(principal.getName());
         return petitionService.getAllPetitionsByCreator(user)
                 .map(this::toPetitionResponseDto)
@@ -47,25 +47,25 @@ public class PetitionUserController {
     }
 
     @GetMapping("/{id}")
-    public PetitionResponseDto getPetitionById(@PathVariable Long id) {
+    public PetitionDto getPetitionById(@PathVariable Long id) {
         final Petition petition = petitionService.getPetitionById(id);
         return toPetitionResponseDto(petition);
     }
 
 
     @PutMapping("/{id}")
-    public PetitionInfoResponseDto updatePetitionById(@PathVariable Long id,
-                                                      @RequestBody UpdatePetitionRequestDto updatePetitionRequestDto) {
+    public PetitionDto updatePetitionById(@PathVariable Long id,
+                                          @RequestBody UpdatePetitionRequest updatePetitionRequestDto) {
         final Petition petition = petitionService.getPetitionById(id);
         final Petition updatedPetition = petitionService.updatePetition(petition,
                 updatePetitionRequestDto.reason(),
                 updatePetitionRequestDto.description());
 
-        return mapper.toPetitionInfoResponseDto(updatedPetition);
+        return petitionMapper.petitionToDto(updatedPetition);
     }
 
-    private PetitionResponseDto toPetitionResponseDto(Petition petition) {
+    private PetitionDto toPetitionResponseDto(Petition petition) {
         final StageEvent currentEvent = petitionService.getPetitionCurrentStageEvent(petition);
-        return mapper.toPetitionResponseDto(petition, currentEvent);
+        return petitionMapper.petitionToDto(petition);
     }
 }
