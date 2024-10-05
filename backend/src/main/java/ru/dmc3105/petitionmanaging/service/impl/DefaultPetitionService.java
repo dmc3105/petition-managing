@@ -3,6 +3,8 @@ package ru.dmc3105.petitionmanaging.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dmc3105.petitionmanaging.controller.request.AddPetitionRequest;
+import ru.dmc3105.petitionmanaging.controller.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.exception.PetitionNotFoundException;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
@@ -10,30 +12,30 @@ import ru.dmc3105.petitionmanaging.model.User;
 import ru.dmc3105.petitionmanaging.repository.PetitionRepository;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 
-import java.util.Date;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Service
 public class DefaultPetitionService implements PetitionService {
     private StageEventService stageEventService;
+    private UserService userService;
     private PetitionRepository petitionRepository;
 
     @Override
     @Transactional
-    public Petition addPetition(String reason, String description, User creator) {
+    public Petition addPetition(AddPetitionRequest addPetitionRequest, String creatorUsername) {
+        User creator = userService.getUserByUsername(creatorUsername);
+
         Petition newPetition = Petition.builder()
-                .reason(reason)
-                .description(description)
+                .reason(addPetitionRequest.reason())
+                .description(addPetitionRequest.description())
                 .build();
 
-        StageEvent creationEvent = StageEvent.builder()
-                .occurenceDate(new Date())
-                .isCurrent(true)
-                .assignee(creator)
-                .petition(newPetition)
-                .stage(StageEvent.Stage.CREATED)
-                .build();
+        StageEvent creationEvent = StageEvent.createJustHappenedEvent(
+                    StageEvent.Stage.CREATED,
+                    creator,
+                    newPetition
+                );
 
         stageEventService.addStageEvent(creationEvent);
         return newPetition;
@@ -41,18 +43,11 @@ public class DefaultPetitionService implements PetitionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Stream<Petition> getAllPetitionsByCreator(User user) {
-        return stageEventService.getStageEventsByAssignee(user)
-                .filter(petition -> petition.getStage() == StageEvent.Stage.CREATED)
+    public Stream<Petition> getAllPetitionsByCreatorUsername(String username) {
+        User user = userService.getUserByUsername(username);
+        return user.getEvents().stream()
+                .filter(event -> event.getStage() == StageEvent.Stage.CREATED)
                 .map(StageEvent::getPetition);
-    }
-
-    @Override
-    public StageEvent getPetitionCurrentStageEvent(Petition petition) {
-        return petition.getEvents().stream()
-                .filter(StageEvent::getIsCurrent)
-                .findFirst()
-                .orElseThrow();
     }
 
     @Override
@@ -62,24 +57,16 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
-    public User getPetitionCreator(Petition petition) {
-        return petition.getEvents().stream()
-                .filter(stageEvent -> stageEvent.getStage() == StageEvent.Stage.CREATED)
-                .findFirst()
-                .orElseThrow()
-                .getAssignee();
-    }
-
-    @Override
-    public Petition updatePetition(Petition petition, String reason, String description) {
-        petition.setReason(reason);
-        petition.setDescription(description);
+    public Petition updatePetition(Long id, UpdatePetitionRequest updatePetitionRequest) {
+        Petition petition = getPetitionById(id);
+        petition.setReason(updatePetitionRequest.reason());
+        petition.setDescription(updatePetitionRequest.description());
         petitionRepository.save(petition);
         return petition;
     }
 
     @Override
-    public void deletePetition(Petition petition) {
-        petitionRepository.delete(petition);
+    public void deletePetition(Long id) {
+        petitionRepository.deleteById(id);
     }
 }

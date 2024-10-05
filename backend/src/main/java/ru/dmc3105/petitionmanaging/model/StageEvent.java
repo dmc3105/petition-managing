@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,11 +20,25 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "stage_events")
 public class StageEvent {
     public enum Stage {CREATED, VIEWED, PROCESSING, COMPLETED, CANCELED}
+
+    public static StageEvent createJustHappenedEvent(
+            Stage stage,
+            User assignee,
+            Petition petition
+    ) {
+        return new StageEvent(
+                null,
+                new Date(),
+                true,
+                stage,
+                assignee,
+                petition
+        );
+    }
 
     @Id
     @GeneratedValue

@@ -1,23 +1,19 @@
 package ru.dmc3105.petitionmanaging.service;
 
+import ru.dmc3105.petitionmanaging.controller.request.AddPetitionRequest;
+import ru.dmc3105.petitionmanaging.controller.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.model.Petition;
-import ru.dmc3105.petitionmanaging.model.StageEvent;
-import ru.dmc3105.petitionmanaging.model.User;
 
 import java.util.stream.Stream;
 
 public interface PetitionService {
-    Petition addPetition(String reason, String description, User creator);
+    Petition addPetition(AddPetitionRequest addPetitionRequest, String creatorUsername);
 
-    Stream<Petition> getAllPetitionsByCreator(User user);
-
-    StageEvent getPetitionCurrentStageEvent(Petition petition);
+    Stream<Petition> getAllPetitionsByCreatorUsername(String username);
 
     Petition getPetitionById(Long id);
 
-    User getPetitionCreator(Petition petition);
+    Petition updatePetition(Long id, UpdatePetitionRequest updatePetitionRequest);
 
-    Petition updatePetition(Petition petition, String reason, String description);
-
-    void deletePetition(Petition petition);
+    void deletePetition(Long id);
 }

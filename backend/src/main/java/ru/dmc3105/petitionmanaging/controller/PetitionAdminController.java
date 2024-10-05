@@ -19,8 +19,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/petition")
-
+@RequestMapping("/admin/petition")
 public class PetitionAdminController {
     private PetitionService petitionService;
     private StageEventService stageEventService;
@@ -43,18 +42,13 @@ public class PetitionAdminController {
 
     @DeleteMapping("/{id}/delete")
     public void deletePetitionById(@PathVariable Long id) {
-        final Petition petition = petitionService.getPetitionById(id);
-        petitionService.deletePetition(petition);
+        petitionService.deletePetition(id);
     }
 
     @PutMapping("/{id}/update")
     public PetitionDto updatePetitionById(@PathVariable Long id,
                                           @RequestBody UpdatePetitionRequest updatePetitionRequestDto) {
-        final Petition petition = petitionService.getPetitionById(id);
-        final Petition updatedPetition = petitionService.updatePetition(petition,
-                updatePetitionRequestDto.reason(),
-                updatePetitionRequestDto.description());
-
+        final Petition updatedPetition = petitionService.updatePetition(id, updatePetitionRequestDto);
         return mapper.petitionToDto(updatedPetition);
     }
 }
