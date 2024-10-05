@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.controller;
+package ru.dmc3105.petitionmanaging.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

@@ -1,7 +1,7 @@
 package ru.dmc3105.petitionmanaging.service;
 
-import ru.dmc3105.petitionmanaging.controller.request.AddPetitionRequest;
-import ru.dmc3105.petitionmanaging.controller.request.UpdatePetitionRequest;
+import ru.dmc3105.petitionmanaging.request.AddPetitionRequest;
+import ru.dmc3105.petitionmanaging.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.model.Petition;
 
 import java.util.stream.Stream;

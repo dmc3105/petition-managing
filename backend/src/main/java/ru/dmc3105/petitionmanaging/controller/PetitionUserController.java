@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dmc3105.petitionmanaging.controller.request.AddPetitionRequest;
-import ru.dmc3105.petitionmanaging.controller.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.dto.PetitionDto;
+import ru.dmc3105.petitionmanaging.mapper.PetitionToDtoMapper;
 import ru.dmc3105.petitionmanaging.model.Petition;
+import ru.dmc3105.petitionmanaging.request.AddPetitionRequest;
+import ru.dmc3105.petitionmanaging.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 
 import java.security.Principal;
@@ -44,7 +45,7 @@ public class PetitionUserController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update")
     public PetitionDto updatePetitionById(@PathVariable Long id,
                                                       @RequestBody UpdatePetitionRequest updatePetitionRequestDto) {
         final Petition updatedPetition = petitionService.updatePetition(id, updatePetitionRequestDto);

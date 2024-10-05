@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import ru.dmc3105.petitionmanaging.model.Role.RoleName;
 import ru.dmc3105.petitionmanaging.security.auth.JwtAuthenticationConfigurer;
 import ru.dmc3105.petitionmanaging.security.auth.util.AccessTokenToJwsStringConverter;
 import ru.dmc3105.petitionmanaging.security.auth.util.JweStringToRefreshTokenConverter;
@@ -63,6 +64,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/user/**").hasAnyRole(RoleName.ADMIN.name(), RoleName.USER.name())
+                        .requestMatchers("/admin/**").hasRole(RoleName.USER.name())
                         .anyRequest().authenticated())
                 .build();
     }

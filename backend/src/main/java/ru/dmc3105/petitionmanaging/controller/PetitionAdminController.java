@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dmc3105.petitionmanaging.dto.StageEventDto;
+import ru.dmc3105.petitionmanaging.mapper.StageEventToDtoMapper;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 import ru.dmc3105.petitionmanaging.service.impl.StageEventService;

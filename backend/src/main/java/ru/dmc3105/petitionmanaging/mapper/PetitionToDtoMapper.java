@@ -1,4 +1,4 @@
-package ru.dmc3105.petitionmanaging.controller;
+package ru.dmc3105.petitionmanaging.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,7 +16,7 @@ public abstract class PetitionToDtoMapper {
 
     protected StageEventDto getCurrentEvent(Petition petition) {
         return petition.getEvents().stream()
-                .filter(StageEvent::getIsCurrent)
+                .filter(event -> event.getIsCurrent() && event.getStage() != StageEvent.Stage.CREATED)
                 .findFirst()
                 .map(this::stageEventToDto)
                 .orElse(null);
