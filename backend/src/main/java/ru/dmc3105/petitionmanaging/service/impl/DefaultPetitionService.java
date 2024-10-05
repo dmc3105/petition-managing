@@ -12,6 +12,7 @@ import ru.dmc3105.petitionmanaging.model.User;
 import ru.dmc3105.petitionmanaging.repository.PetitionRepository;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
@@ -36,9 +37,10 @@ public class DefaultPetitionService implements PetitionService {
                     creator,
                     newPetition
                 );
-
         stageEventService.addStageEvent(creationEvent);
-        return newPetition;
+
+        newPetition.setEvents(List.of(creationEvent));
+        return petitionRepository.save(newPetition);
     }
 
     @Override
