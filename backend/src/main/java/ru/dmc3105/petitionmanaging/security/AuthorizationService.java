@@ -5,7 +5,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.dmc3105.petitionmanaging.model.Petition;
-import ru.dmc3105.petitionmanaging.model.StageEvent;
+import ru.dmc3105.petitionmanaging.model.Stage;
 import ru.dmc3105.petitionmanaging.model.User;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 import ru.dmc3105.petitionmanaging.service.impl.StageEventService;
@@ -34,7 +34,7 @@ public class AuthorizationService {
     }
 
     public boolean isPetitionOwner(Petition petition, String username) {
-        return stageEventService.getStageEventByPetitionAndStage(petition, StageEvent.Stage.CREATED)
+        return stageEventService.getStageEventByPetitionAndStage(petition, Stage.CREATED)
                 .getAssignee()
                 .getUsername()
                 .equals(username);

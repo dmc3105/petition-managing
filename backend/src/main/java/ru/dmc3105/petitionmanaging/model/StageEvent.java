@@ -23,8 +23,6 @@ import java.util.Date;
 @Entity
 @Table(name = "stage_events")
 public class StageEvent {
-    public enum Stage {CREATED, VIEWED, PROCESSING, COMPLETED, CANCELED}
-
     public static StageEvent createJustHappenedEvent(
             Stage stage,
             User assignee,

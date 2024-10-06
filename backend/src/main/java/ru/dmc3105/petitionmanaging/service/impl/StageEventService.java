@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dmc3105.petitionmanaging.model.Petition;
+import ru.dmc3105.petitionmanaging.model.Stage;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
 import ru.dmc3105.petitionmanaging.repository.StageEventRepository;
@@ -24,7 +25,7 @@ public class StageEventService {
         return repository.findAllByAssignee(assignee);
     }
 
-    public StageEvent getStageEventByPetitionAndStage(Petition petition, StageEvent.Stage stage) {
+    public StageEvent getStageEventByPetitionAndStage(Petition petition, Stage stage) {
         return petition.getEvents().stream()
                 .filter(event -> event.getStage() == stage)
                 .findFirst()

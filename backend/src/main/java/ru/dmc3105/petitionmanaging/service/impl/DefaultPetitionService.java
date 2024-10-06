@@ -7,6 +7,7 @@ import ru.dmc3105.petitionmanaging.request.AddPetitionRequest;
 import ru.dmc3105.petitionmanaging.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.exception.PetitionNotFoundException;
 import ru.dmc3105.petitionmanaging.model.Petition;
+import ru.dmc3105.petitionmanaging.model.Stage;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
 import ru.dmc3105.petitionmanaging.repository.PetitionRepository;
@@ -33,7 +34,7 @@ public class DefaultPetitionService implements PetitionService {
                 .build();
 
         StageEvent creationEvent = StageEvent.createJustHappenedEvent(
-                    StageEvent.Stage.CREATED,
+                    Stage.CREATED,
                     creator,
                     newPetition
                 );
@@ -48,7 +49,7 @@ public class DefaultPetitionService implements PetitionService {
     public Stream<Petition> getAllPetitionsByCreatorUsername(String username) {
         User user = userService.getUserByUsername(username);
         return user.getEvents().stream()
-                .filter(event -> event.getStage() == StageEvent.Stage.CREATED)
+                .filter(event -> event.getStage() == Stage.CREATED)
                 .map(StageEvent::getPetition);
     }
 
