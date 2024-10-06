@@ -16,10 +16,6 @@ import java.util.stream.Stream;
 public class StageEventService {
     private StageEventRepository repository;
 
-    public void addStageEvent(StageEvent stageEvent) {
-        repository.save(stageEvent);
-    }
-
     @Transactional(readOnly = true)
     public Stream<StageEvent> getStageEventsByAssignee(User assignee) {
         return repository.findAllByAssignee(assignee);
