@@ -10,19 +10,22 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "petitions")
 public class Petition {
+
+    public static Petition createPetition(String reason, String description) {
+        return new Petition(null, reason, description, new ArrayList<>());
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
