@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.Stage;
 import ru.dmc3105.petitionmanaging.model.User;
-import ru.dmc3105.petitionmanaging.service.PetitionService;
+import ru.dmc3105.petitionmanaging.repository.PetitionRepository;
 import ru.dmc3105.petitionmanaging.service.impl.StageEventService;
 
 @AllArgsConstructor
 @Service
 public class AuthorizationService {
     private StageEventService stageEventService;
-    private PetitionService petitionService;
+    private PetitionRepository petitionRepository;
 
     public boolean isPrincipalUsernameAndPetitionOwner(@NonNull final UserDetails principal, String username, Petition petition) {
         return isPrincipalUsername(principal, username) && isPetitionOwner(petition, username);
@@ -29,7 +29,7 @@ public class AuthorizationService {
     }
 
     public boolean isPetitionOwner(Long petitionId, String username) {
-        Petition petition = petitionService.getPetitionById(petitionId);
+        Petition petition = petitionRepository.findById(petitionId).orElseThrow();
         return isPetitionOwner(petition, username);
     }
 

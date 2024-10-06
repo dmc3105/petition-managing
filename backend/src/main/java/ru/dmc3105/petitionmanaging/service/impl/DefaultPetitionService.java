@@ -1,6 +1,7 @@
 package ru.dmc3105.petitionmanaging.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dmc3105.petitionmanaging.exception.PetitionNotFoundException;
@@ -23,6 +24,7 @@ public class DefaultPetitionService implements PetitionService {
 
     @Override
     @Transactional
+    @PreAuthorize("@authorizationService.isPrincipalUsername(principal, #creatorUsername)")
     public Petition addPetition(AddPetitionRequest addPetitionRequest, String creatorUsername) {
         User creator = userService.getUserByUsername(creatorUsername);
 
@@ -41,6 +43,10 @@ public class DefaultPetitionService implements PetitionService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("""
+            hasRole('ROLE_ADMIN') ||
+            hasRole('ROLE_USER') && @authorizationService.isPrincipalUsername(principal, #username)
+    """)
     public Stream<Petition> getAllPetitionsByCreatorUsername(String username) {
         User user = userService.getUserByUsername(username);
         return user.getEvents().stream()
@@ -49,12 +55,20 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
+    @PreAuthorize("""
+            hasRole('ROLE_ADMIN') ||
+            hasRole('ROLE_USER') && @authorizationService.isPetitionOwner(#id, principal.username)
+    """)
     public Petition getPetitionById(Long id) {
         return petitionRepository.findById(id).orElseThrow(
                 () -> new PetitionNotFoundException(id));
     }
 
     @Override
+    @PreAuthorize("""
+            hasRole('ROLE_ADMIN') ||
+            hasRole('ROLE_USER') && @authorizationService.isPetitionOwner(#id, principal.username)
+    """)
     public Petition updatePetition(Long id, UpdatePetitionRequest updatePetitionRequest) {
         Petition petition = getPetitionById(id);
         petition.setReason(updatePetitionRequest.reason());
@@ -64,11 +78,13 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deletePetition(Long id) {
         petitionRepository.deleteById(id);
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Petition viewPetitionById(Long id, String viewerUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
@@ -80,6 +96,7 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Petition processPetitionById(Long id, String processorUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
@@ -91,6 +108,7 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Petition completePetitionById(Long id, String executorUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
@@ -102,6 +120,10 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
+    @PreAuthorize("""
+            hasRole('ROLE_ADMIN') ||
+            hasRole('ROLE_USER') && @authorizationService.isPetitionOwner(#id, principal.username)
+    """)
     public Petition cancelPetitionById(Long id, String cancelerUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
