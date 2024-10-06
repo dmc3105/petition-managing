@@ -3,23 +3,21 @@ package ru.dmc3105.petitionmanaging.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dmc3105.petitionmanaging.request.AddPetitionRequest;
-import ru.dmc3105.petitionmanaging.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.exception.PetitionNotFoundException;
 import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.model.Stage;
 import ru.dmc3105.petitionmanaging.model.StageEvent;
 import ru.dmc3105.petitionmanaging.model.User;
 import ru.dmc3105.petitionmanaging.repository.PetitionRepository;
+import ru.dmc3105.petitionmanaging.request.AddPetitionRequest;
+import ru.dmc3105.petitionmanaging.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Service
 public class DefaultPetitionService implements PetitionService {
-    private StageEventService stageEventService;
     private UserService userService;
     private PetitionRepository petitionRepository;
 
@@ -28,19 +26,16 @@ public class DefaultPetitionService implements PetitionService {
     public Petition addPetition(AddPetitionRequest addPetitionRequest, String creatorUsername) {
         User creator = userService.getUserByUsername(creatorUsername);
 
-        Petition newPetition = Petition.builder()
-                .reason(addPetitionRequest.reason())
-                .description(addPetitionRequest.description())
-                .build();
+        Petition newPetition = Petition.createPetition(addPetitionRequest.reason(), addPetitionRequest.description());
 
-        StageEvent creationEvent = StageEvent.createJustHappenedEvent(
-                    Stage.CREATED,
-                    creator,
-                    newPetition
-                );
-        stageEventService.addStageEvent(creationEvent);
+        StageEvent creationStageEvent = StageEvent.createJustHappenedEvent(
+                Stage.CREATED,
+                creator,
+                newPetition
+        );
 
-        newPetition.setEvents(List.of(creationEvent));
+        newPetition.getEvents().add(creationStageEvent);
+
         return petitionRepository.save(newPetition);
     }
 
@@ -71,5 +66,73 @@ public class DefaultPetitionService implements PetitionService {
     @Override
     public void deletePetition(Long id) {
         petitionRepository.deleteById(id);
+    }
+
+    @Override
+    public Petition viewPetitionById(Long id) {
+        final StageEvent currentStage = getCurrentStageByPetitionId(id);
+        switch (currentStage.getStage()) {
+            case CREATED -> {
+                return changePetitionStage(currentStage, Stage.VIEWED);
+            }
+            default -> throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    public Petition processPetitionById(Long id) {
+        final StageEvent currentStage = getCurrentStageByPetitionId(id);
+        switch (currentStage.getStage()) {
+            case CREATED, VIEWED -> {
+                return changePetitionStage(currentStage, Stage.PROCESSING);
+            }
+            default -> throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    public Petition completePetitionById(Long id) {
+        final StageEvent currentStage = getCurrentStageByPetitionId(id);
+        switch (currentStage.getStage()) {
+            case CREATED, VIEWED, PROCESSING -> {
+                return changePetitionStage(currentStage, Stage.COMPLETED);
+            }
+            default -> throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    public Petition cancelPetitionById(Long id) {
+        final StageEvent currentStage = getCurrentStageByPetitionId(id);
+        switch (currentStage.getStage()) {
+            case CREATED, VIEWED, PROCESSING -> {
+                return changePetitionStage(currentStage, Stage.CANCELED);
+            }
+            default -> throw new IllegalStateException();
+        }
+    }
+
+    private Petition changePetitionStage(StageEvent currentStageEvent, Stage newStage) {
+        currentStageEvent.setIsCurrent(false);
+        final Petition petition = currentStageEvent.getPetition();
+        final User assignee = currentStageEvent.getAssignee();
+
+        petition.getEvents().add(
+                StageEvent.createJustHappenedEvent(
+                        newStage,
+                        assignee,
+                        petition
+                )
+        );
+
+        return petitionRepository.save(petition);
+    }
+
+    private StageEvent getCurrentStageByPetitionId(Long id) {
+        Petition petition = getPetitionById(id);
+        return petition.getEvents().stream()
+                .filter(StageEvent::getIsCurrent)
+                .findFirst()
+                .orElseThrow();
     }
 }
