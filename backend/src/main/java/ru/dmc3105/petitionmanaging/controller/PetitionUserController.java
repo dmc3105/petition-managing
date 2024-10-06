@@ -2,6 +2,7 @@ package ru.dmc3105.petitionmanaging.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -49,6 +50,12 @@ public class PetitionUserController {
     public PetitionDto updatePetitionById(@PathVariable Long id,
                                                       @RequestBody UpdatePetitionRequest updatePetitionRequestDto) {
         final Petition updatedPetition = petitionService.updatePetition(id, updatePetitionRequestDto);
+        return petitionMapper.petitionToDto(updatedPetition);
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public PetitionDto cancelPetitionById(@PathVariable Long id, Principal principal) {
+        final Petition updatedPetition = petitionService.cancelPetitionById(id);
         return petitionMapper.petitionToDto(updatedPetition);
     }
 }
