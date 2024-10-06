@@ -4,11 +4,13 @@ import ru.dmc3105.petitionmanaging.model.Petition;
 import ru.dmc3105.petitionmanaging.request.AddPetitionRequest;
 import ru.dmc3105.petitionmanaging.request.UpdatePetitionRequest;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface PetitionService {
     Petition addPetition(AddPetitionRequest addPetitionRequest, String creatorUsername);
 
+    List<Petition> getAllPetitions();
     Stream<Petition> getAllPetitionsByCreatorUsername(String username);
 
     Petition getPetitionById(Long id);
@@ -24,4 +26,5 @@ public interface PetitionService {
     Petition completePetitionById(Long id, String executorUsername);
 
     Petition cancelPetitionById(Long id, String cancelerUsername);
+
 }

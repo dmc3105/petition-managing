@@ -1,6 +1,7 @@
 package ru.dmc3105.petitionmanaging.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dmc3105.petitionmanaging.model.Petition;
@@ -17,6 +18,10 @@ public class StageEventService {
     private StageEventRepository repository;
 
     @Transactional(readOnly = true)
+    @PreAuthorize("""
+            hasRole('ROLE_ADMIN') ||
+            hasRole('ROLE_USER') && @authorizationService.isPrincipalUsername(principal, #assignee.username) 
+    """)
     public Stream<StageEvent> getStageEventsByAssignee(User assignee) {
         return repository.findAllByAssignee(assignee);
     }

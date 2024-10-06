@@ -14,6 +14,7 @@ import ru.dmc3105.petitionmanaging.request.AddPetitionRequest;
 import ru.dmc3105.petitionmanaging.request.UpdatePetitionRequest;
 import ru.dmc3105.petitionmanaging.service.PetitionService;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
@@ -39,6 +40,12 @@ public class DefaultPetitionService implements PetitionService {
         newPetition.getEvents().add(creationStageEvent);
 
         return petitionRepository.save(newPetition);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<Petition> getAllPetitions() {
+        return petitionRepository.findAll();
     }
 
     @Override
