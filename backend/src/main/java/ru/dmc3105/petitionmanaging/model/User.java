@@ -51,7 +51,7 @@ public class User implements UserDetails {
     )
     private List<Role> roles;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "assignee_id")
     private List<StageEvent> events;
 

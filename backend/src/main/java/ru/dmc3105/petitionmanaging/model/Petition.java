@@ -33,7 +33,7 @@ public class Petition {
 
     private String description;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "petition_id")
     private List<StageEvent> events;
 }

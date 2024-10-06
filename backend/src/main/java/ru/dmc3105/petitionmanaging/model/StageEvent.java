@@ -52,10 +52,10 @@ public class StageEvent {
     @Enumerated(EnumType.STRING)
     private Stage stage;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private User assignee;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Petition petition;
 
 }
