@@ -55,7 +55,7 @@ public class PetitionUserController {
 
     @PatchMapping("/{id}/cancel")
     public PetitionDto cancelPetitionById(@PathVariable Long id, Principal principal) {
-        final Petition updatedPetition = petitionService.cancelPetitionById(id);
+        final Petition updatedPetition = petitionService.cancelPetitionById(id, principal.getName());
         return petitionMapper.petitionToDto(updatedPetition);
     }
 }

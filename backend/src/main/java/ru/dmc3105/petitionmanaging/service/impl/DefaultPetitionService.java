@@ -69,53 +69,53 @@ public class DefaultPetitionService implements PetitionService {
     }
 
     @Override
-    public Petition viewPetitionById(Long id) {
+    public Petition viewPetitionById(Long id, String viewerUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
             case CREATED -> {
-                return changePetitionStage(currentStage, Stage.VIEWED);
+                return changePetitionStage(currentStage, Stage.VIEWED, viewerUsername);
             }
             default -> throw new IllegalStateException();
         }
     }
 
     @Override
-    public Petition processPetitionById(Long id) {
+    public Petition processPetitionById(Long id, String processorUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
             case CREATED, VIEWED -> {
-                return changePetitionStage(currentStage, Stage.PROCESSING);
+                return changePetitionStage(currentStage, Stage.PROCESSING, processorUsername);
             }
             default -> throw new IllegalStateException();
         }
     }
 
     @Override
-    public Petition completePetitionById(Long id) {
+    public Petition completePetitionById(Long id, String executorUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
             case CREATED, VIEWED, PROCESSING -> {
-                return changePetitionStage(currentStage, Stage.COMPLETED);
+                return changePetitionStage(currentStage, Stage.COMPLETED, executorUsername);
             }
             default -> throw new IllegalStateException();
         }
     }
 
     @Override
-    public Petition cancelPetitionById(Long id) {
+    public Petition cancelPetitionById(Long id, String cancelerUsername) {
         final StageEvent currentStage = getCurrentStageByPetitionId(id);
         switch (currentStage.getStage()) {
             case CREATED, VIEWED, PROCESSING -> {
-                return changePetitionStage(currentStage, Stage.CANCELED);
+                return changePetitionStage(currentStage, Stage.CANCELED, cancelerUsername);
             }
             default -> throw new IllegalStateException();
         }
     }
 
-    private Petition changePetitionStage(StageEvent currentStageEvent, Stage newStage) {
+    private Petition changePetitionStage(StageEvent currentStageEvent, Stage newStage, String assigneeUsername) {
         currentStageEvent.setIsCurrent(false);
         final Petition petition = currentStageEvent.getPetition();
-        final User assignee = currentStageEvent.getAssignee();
+        final User assignee = userService.getUserByUsername(assigneeUsername);
 
         petition.getEvents().add(
                 StageEvent.createJustHappenedEvent(

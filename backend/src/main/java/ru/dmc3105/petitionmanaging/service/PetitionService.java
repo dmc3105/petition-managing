@@ -17,11 +17,11 @@ public interface PetitionService {
 
     void deletePetition(Long id);
 
-    Petition viewPetitionById(Long id);
+    Petition viewPetitionById(Long id, String viewerUsername);
 
-    Petition processPetitionById(Long id);
+    Petition processPetitionById(Long id, String processorUsername);
 
-    Petition completePetitionById(Long id);
+    Petition completePetitionById(Long id, String executorUsername);
 
-    Petition cancelPetitionById(Long id);
+    Petition cancelPetitionById(Long id, String cancelerUsername);
 }

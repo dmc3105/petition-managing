@@ -36,19 +36,19 @@ public class PetitionAdminController {
 
     @PatchMapping("/{id}/view")
     public PetitionDto viewPetitionById(@PathVariable Long id, Principal principal) {
-        final Petition updatedPetition = petitionService.viewPetitionById(id);
+        final Petition updatedPetition = petitionService.viewPetitionById(id, principal.getName());
         return petitionMapper.petitionToDto(updatedPetition);
     }
 
     @PatchMapping("/{id}/process")
     public PetitionDto processPetitionById(@PathVariable Long id, Principal principal) {
-        final Petition updatedPetition = petitionService.processPetitionById(id);
+        final Petition updatedPetition = petitionService.processPetitionById(id, principal.getName());
         return petitionMapper.petitionToDto(updatedPetition);
     }
 
     @PatchMapping("/{id}/complete")
     public PetitionDto cancelPetitionById(@PathVariable Long id, Principal principal) {
-        final Petition updatedPetition = petitionService.completePetitionById(id);
+        final Petition updatedPetition = petitionService.completePetitionById(id, principal.getName());
         return petitionMapper.petitionToDto(updatedPetition);
     }
 }
